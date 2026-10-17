@@ -36,7 +36,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   int _currentIndex = 0;
   bool isAdmin = false;
 
-  // দোকানের ডায়নামিক সেটিংস
+  // দোকানের সেটিংস
   String adminPassword = "1234";
   String bkashNumber = "01700-000000 (Personal)";
   String nagadNumber = "01800-000000 (Personal)";
@@ -50,102 +50,70 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       "name": "আব্দুর রহিম",
       "phone": "01711111111",
       "due": 1250.0,
-      "notes": ["১৫ অক্টোবর: প্রেসারের ওষুধ ১ পাতা - ৫০০ ৳", "১৮ অক্টোবর: নাপা এক্সট্রা ও গ্যাস্ট্রিক - ৭৫০ ৳"]
+      "notes": <String>["১৫ অক্টোবর: প্রেসারের ওষুধ ১ পাতা - ৫০০ ৳", "১৮ অক্টোবর: নাপা এক্সট্রা ও গ্যাস্ট্রিক - ৭৫০ ৳"]
     },
     {
       "name": "মো: রফিকুল ইসলাম",
       "phone": "01822222222",
       "due": 840.0,
-      "notes": ["১২ অক্টোবর: ইনসুলিন ও সুগারের ওষুধ - ৮৪০ ৳"]
+      "notes": <String>["১২ অক্টোবর: ইনসুলিন ও সুগারের ওষুধ - ৮৪০ ৳"]
     },
     {
       "name": "কামাল হোসেন",
       "phone": "01933333333",
       "due": 420.0,
-      "notes": ["১০ অক্টোবর: কাশির সিরাপ ও অ্যান্টিবায়োটিক - ৪২০ ৳"]
+      "notes": <String>["১০ অক্টোবর: কাশির সিরাপ ও অ্যান্টিবায়োটিক - ৪২০ ৳"]
     },
   ];
 
-  // পেন্ডিং পেমেন্ট রিকোয়েস্ট
   List<Map<String, dynamic>> paymentRequests = [];
-
-  // প্রেসক্রিপশন ও কাস্টমার অর্ডার
   List<Map<String, dynamic>> orderList = [];
 
-  // ডেইলি সেলস ও প্রফিট
   double todaySale = 0.0;
   double profitMargin = 12.0;
   double monthlyTarget = 300000.0;
   double currentMonthAchieved = 145000.0;
 
-  // DIMS স্টাইল বাংলাদেশ ওষুধ ডাটাবেস
+  // বাংলাদেশ ওষুধ ডাটাবেস
   List<Map<String, String>> medicineDatabase = [
-    // গ্যাস্ট্রিক ও এসিডিটি
-    {"name": "Seclo 20mg", "generic": "Omeprazole", "company": "Square", "type": "Capsule", "cat": "Gastric"},
-    {"name": "Sergel 20mg", "generic": "Esomeprazole", "company": "Healthcare", "type": "Capsule", "cat": "Gastric"},
-    {"name": "Maxpro 20mg", "generic": "Esomeprazole", "company": "Renata", "type": "Capsule", "cat": "Gastric"},
-    {"name": "Nexum 20mg", "generic": "Esomeprazole", "company": "Beximco", "type": "Tablet", "cat": "Gastric"},
-    {"name": "Pantonix 20mg", "generic": "Pantoprazole", "company": "Incepta", "type": "Tablet", "cat": "Gastric"},
-    {"name": "Finix 20mg", "generic": "Rabeprazole", "company": "Opsonin", "type": "Tablet", "cat": "Gastric"},
-    {"name": "Entacyd Plus", "generic": "Magaldrate + Simethicone", "company": "Square", "type": "Syrup", "cat": "Gastric"},
-    
-    // জ্বর, সর্দি ও ব্যথা
-    {"name": "Napa 500mg", "generic": "Paracetamol", "company": "Beximco", "type": "Tablet", "cat": "Fever & Pain"},
-    {"name": "Napa Extra", "generic": "Paracetamol + Caffeine", "company": "Beximco", "type": "Tablet", "cat": "Fever & Pain"},
-    {"name": "Ace 500mg", "generic": "Paracetamol", "company": "Square", "type": "Tablet", "cat": "Fever & Pain"},
-    {"name": "Ace Plus", "generic": "Paracetamol + Caffeine", "company": "Square", "type": "Tablet", "cat": "Fever & Pain"},
-    {"name": "Fast 500mg", "generic": "Paracetamol", "company": "Acme", "type": "Tablet", "cat": "Fever & Pain"},
-    {"name": "Renova 500mg", "generic": "Paracetamol", "company": "Opsonin", "type": "Tablet", "cat": "Fever & Pain"},
-    {"name": "Torax 10mg", "generic": "Ketorolac Tromethamine", "company": "Square", "type": "Tablet", "cat": "Fever & Pain"},
-    {"name": "Rolac 10mg", "generic": "Ketorolac Tromethamine", "company": "Renata", "type": "Tablet", "cat": "Fever & Pain"},
-    {"name": "Flamyd 400mg", "generic": "Metronidazole", "company": "Sanofi", "type": "Tablet", "cat": "Fever & Pain"},
-
-    // অ্যান্টিবায়োটিক
-    {"name": "Azithrocin 500mg", "generic": "Azithromycin", "company": "Beximco", "type": "Tablet", "cat": "Antibiotic"},
-    {"name": "Zimax 500mg", "generic": "Azithromycin", "company": "Square", "type": "Tablet", "cat": "Antibiotic"},
-    {"name": "Tridosil 500mg", "generic": "Azithromycin", "company": "Incepta", "type": "Tablet", "cat": "Antibiotic"},
-    {"name": "Cef-3 200mg", "generic": "Cefixime", "company": "Square", "type": "Capsule", "cat": "Antibiotic"},
-    {"name": "Moxacil 500mg", "generic": "Amoxicillin", "company": "Square", "type": "Capsule", "cat": "Antibiotic"},
-    {"name": "Furocef 500mg", "generic": "Cefuroxime Axetil", "company": "Incepta", "type": "Tablet", "cat": "Antibiotic"},
-    {"name": "Kilbac 500mg", "generic": "Cefuroxime Axetil", "company": "Healthcare", "type": "Tablet", "cat": "Antibiotic"},
-    {"name": "Ciprocin 500mg", "generic": "Ciprofloxacin", "company": "Square", "type": "Tablet", "cat": "Antibiotic"},
-
-    // অ্যালার্জি ও কাশি
-    {"name": "Alatrol 10mg", "generic": "Cetirizine HCl", "company": "Square", "type": "Tablet", "cat": "Allergy & Cough"},
-    {"name": "Fexo 120mg", "generic": "Fexofenadine HCl", "company": "Square", "type": "Tablet", "cat": "Allergy & Cough"},
-    {"name": "Fexo 180mg", "generic": "Fexofenadine HCl", "company": "Square", "type": "Tablet", "cat": "Allergy & Cough"},
-    {"name": "Tofen 1mg", "generic": "Ketotifen", "company": "Beximco", "type": "Syrup", "cat": "Allergy & Cough"},
-    {"name": "Monas 10mg", "generic": "Montelukast", "company": "Acme", "type": "Tablet", "cat": "Allergy & Cough"},
-    {"name": "Montene 10mg", "generic": "Montelukast", "company": "Square", "type": "Tablet", "cat": "Allergy & Cough"},
-    {"name": "Adrylex", "generic": "Levocetirizine", "company": "Square", "type": "Tablet", "cat": "Allergy & Cough"},
-    {"name": "Tusca", "generic": "Dextromethorphan + Guaiphenesin", "company": "Square", "type": "Syrup", "cat": "Allergy & Cough"},
-
-    // ডায়াবেটিস ও প্রেশার
-    {"name": "Compath 5/500", "generic": "Metformin + Linagliptin", "company": "Square", "type": "Tablet", "cat": "Diabetes & Pressure"},
-    {"name": "Metfo 500mg", "generic": "Metformin HCl", "company": "Beximco", "type": "Tablet", "cat": "Diabetes & Pressure"},
-    {"name": "Bizoran 5/20", "generic": "Amlodipine + Olmesartan", "company": "Square", "type": "Tablet", "cat": "Diabetes & Pressure"},
-    {"name": "Camlosart 5/20", "generic": "Amlodipine + Olmesartan", "company": "Beximco", "type": "Tablet", "cat": "Diabetes & Pressure"},
-    {"name": "Angilock 50mg", "generic": "Losartan Potassium", "company": "Square", "type": "Tablet", "cat": "Diabetes & Pressure"},
-    {"name": "Osartil 50mg", "generic": "Losartan Potassium", "company": "Incepta", "type": "Tablet", "cat": "Diabetes & Pressure"},
-
-    // ভিটামিন
-    {"name": "Ceevit 250mg", "generic": "Vitamin C", "company": "Square", "type": "Chewable", "cat": "Vitamins"},
-    {"name": "Bicozin", "generic": "Vitamin B Complex + Zinc", "company": "Square", "type": "Syrup", "cat": "Vitamins"},
-    {"name": "Aristovit B", "generic": "Vitamin B Complex", "company": "Aristopharma", "type": "Tablet", "cat": "Vitamins"},
-    {"name": "Coralcal-D", "generic": "Calcium Carbonate + Vit D3", "company": "Square", "type": "Tablet", "cat": "Vitamins"},
-    {"name": "Calbo-D", "generic": "Calcium + Vitamin D3", "company": "Square", "type": "Tablet", "cat": "Vitamins"},
-    {"name": "D-Rise 20000 IU", "generic": "Cholecalciferol", "company": "Square", "type": "Capsule", "cat": "Vitamins"},
+    {"name": "Seclo 20mg", "generic": "Omeprazole", "company": "Square", "type": "Capsule"},
+    {"name": "Sergel 20mg", "generic": "Esomeprazole", "company": "Healthcare", "type": "Capsule"},
+    {"name": "Maxpro 20mg", "generic": "Esomeprazole", "company": "Renata", "type": "Capsule"},
+    {"name": "Nexum 20mg", "generic": "Esomeprazole", "company": "Beximco", "type": "Tablet"},
+    {"name": "Pantonix 20mg", "generic": "Pantoprazole", "company": "Incepta", "type": "Tablet"},
+    {"name": "Finix 20mg", "generic": "Rabeprazole", "company": "Opsonin", "type": "Tablet"},
+    {"name": "Napa 500mg", "generic": "Paracetamol", "company": "Beximco", "type": "Tablet"},
+    {"name": "Napa Extra", "generic": "Paracetamol + Caffeine", "company": "Beximco", "type": "Tablet"},
+    {"name": "Ace 500mg", "generic": "Paracetamol", "company": "Square", "type": "Tablet"},
+    {"name": "Ace Plus", "generic": "Paracetamol + Caffeine", "company": "Square", "type": "Tablet"},
+    {"name": "Fast 500mg", "generic": "Paracetamol", "company": "Acme", "type": "Tablet"},
+    {"name": "Torax 10mg", "generic": "Ketorolac Tromethamine", "company": "Square", "type": "Tablet"},
+    {"name": "Rolac 10mg", "generic": "Ketorolac Tromethamine", "company": "Renata", "type": "Tablet"},
+    {"name": "Flamyd 400mg", "generic": "Metronidazole", "company": "Sanofi", "type": "Tablet"},
+    {"name": "Azithrocin 500mg", "generic": "Azithromycin", "company": "Beximco", "type": "Tablet"},
+    {"name": "Zimax 500mg", "generic": "Azithromycin", "company": "Square", "type": "Tablet"},
+    {"name": "Cef-3 200mg", "generic": "Cefixime", "company": "Square", "type": "Capsule"},
+    {"name": "Moxacil 500mg", "generic": "Amoxicillin", "company": "Square", "type": "Capsule"},
+    {"name": "Alatrol 10mg", "generic": "Cetirizine HCl", "company": "Square", "type": "Tablet"},
+    {"name": "Fexo 120mg", "generic": "Fexofenadine HCl", "company": "Square", "type": "Tablet"},
+    {"name": "Monas 10mg", "generic": "Montelukast", "company": "Acme", "type": "Tablet"},
+    {"name": "Tofen 1mg", "generic": "Ketotifen", "company": "Beximco", "type": "Syrup"},
+    {"name": "Compath 5/500", "generic": "Metformin + Linagliptin", "company": "Square", "type": "Tablet"},
+    {"name": "Bizoran 5/20", "generic": "Amlodipine + Olmesartan", "company": "Square", "type": "Tablet"},
+    {"name": "Angilock 50mg", "generic": "Losartan Potassium", "company": "Square", "type": "Tablet"},
+    {"name": "Ceevit 250mg", "generic": "Vitamin C", "company": "Square", "type": "Chewable"},
+    {"name": "Bicozin", "generic": "Vitamin B Complex + Zinc", "company": "Square", "type": "Syrup"},
+    {"name": "Calbo-D", "generic": "Calcium + Vitamin D3", "company": "Square", "type": "Tablet"},
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 2,
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("সুলতান ফার্মেসি", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Colors.white)),
+            Text("সুলতান ফার্মেসি", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
             Text("ডিজিটাল খাতা ও দোকান ম্যানেজমেন্ট", style: TextStyle(fontSize: 11, color: Colors.white70)),
           ],
         ),
@@ -196,7 +164,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         destinations: [
           const NavigationDestination(icon: Icon(Icons.account_balance_wallet), label: 'বাকি খাতা'),
           const NavigationDestination(icon: Icon(Icons.medication), label: 'ওষুধ তালিকা'),
-          const NavigationDestination(icon: Icon(Icons.receipt_long), label: 'প্রেসক্রিপশন'),
+          const NavigationDestination(icon: Icon(Icons.receipt_long), label: 'অর্ডার'),
           if (isAdmin) const NavigationDestination(icon: Icon(Icons.analytics), label: 'সেলস ও লাভ'),
           if (isAdmin) const NavigationDestination(icon: Icon(Icons.settings), label: 'সেটিংস'),
         ],
@@ -215,7 +183,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     }
   }
 
-  // ১. বাকি খাতা
+  // ১. বাকি খাতা স্ক্রিন
   Widget _buildBakiScreen() {
     final searchPhoneController = TextEditingController();
 
@@ -232,7 +200,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
               icon: const Icon(Icons.person_add),
-              label: const Text("+ নতুন কাস্টমার / বাকি যোগ করুন", style: TextStyle(fontSize: 16)),
+              label: const Text("+ নতুন বাকি এন্ট্রি করুন", style: TextStyle(fontSize: 16)),
               onPressed: () => _addNewDueDialog(),
             ),
             const SizedBox(height: 14),
@@ -251,7 +219,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     controller: searchPhoneController,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
-                      labelText: "কাস্টমারের মোবাইল নম্বর লিখুন",
+                      labelText: "মোবাইল নম্বর লিখুন",
                       prefixIcon: const Icon(Icons.phone),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       filled: true,
@@ -260,18 +228,20 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal.shade700,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.teal.shade700, foregroundColor: Colors.white),
                     icon: const Icon(Icons.search),
                     label: const Text("বাকি ও হিসাব দেখুন"),
                     onPressed: () {
                       final p = searchPhoneController.text.trim();
-                      final cust = customers.firstWhere((c) => c['phone'] == p, orElse: () => {});
-                      if (cust.isNotEmpty) {
-                        _showCustomerDueDetails(cust);
+                      Map<String, dynamic>? found;
+                      for (var c in customers) {
+                        if (c['phone'] == p) {
+                          found = c;
+                          break;
+                        }
+                      }
+                      if (found != null) {
+                        _showCustomerDueDetails(found);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("এই নম্বরে কোনো বকেয়া হিসাব পাওয়া যায়নি!")),
@@ -283,23 +253,15 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            color: Colors.white,
-            elevation: 2,
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.payment, color: Colors.teal),
-                      SizedBox(width: 8),
-                      Text("বিকাশ ও নগদ নম্বর", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    ],
-                  ),
+                  const Text("বিকাশ ও নগদ পেমেন্ট নম্বর", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                   const Divider(),
                   Text("• বিকাশ: $bkashNumber", style: const TextStyle(fontWeight: FontWeight.w600)),
                   const SizedBox(height: 4),
@@ -309,39 +271,40 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             ),
           ),
           if (isAdmin) ...[
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("সকল বকেয়া তালিকা", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                const Text("সকল বকেয়া তালিকা", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 Text("মোট: ${customers.length} জন", style: const TextStyle(color: Colors.teal, fontWeight: FontWeight.bold)),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: customers.length,
               itemBuilder: (context, index) {
                 final c = customers[index];
+                final double dueVal = (c['due'] as num).toDouble();
+                final List noteList = c['notes'] as List;
                 return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  margin: const EdgeInsets.symmetric(vertical: 4),
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundColor: Colors.teal.shade100,
-                      child: Text(c['name'][0], style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.teal)),
+                      child: Text(c['name'].toString().isNotEmpty ? c['name'][0] : "?", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.teal)),
                     ),
                     title: Text(c['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text("ফোন: ${c['phone']}\nনোট: ${(c['notes'] as List).isNotEmpty ? c['notes'].last : ''}"),
-                    trailing: Text("৳ ${c['due'].toStringAsFixed(0)}", style: const TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold)),
+                    subtitle: Text("ফোন: ${c['phone']}\nনোট: ${noteList.isNotEmpty ? noteList.last : ''}"),
+                    trailing: Text("৳ ${dueVal.toStringAsFixed(0)}", style: const TextStyle(fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold)),
                     onTap: () => _showCustomerDueDetails(c),
                   ),
                 );
               },
             ),
-            const SizedBox(height: 18),
-            const Text("অনলাইন পেমেন্ট রিকোয়েস্ট", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.deepOrange)),
-            const SizedBox(height: 6),
+            const SizedBox(height: 16),
+            const Text("পেন্ডিং পেমেন্ট রিকোয়েস্ট", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.deepOrange)),
             paymentRequests.isEmpty
                 ? const Text("বর্তমানে কোনো পেন্ডিং রিকোয়েস্ট নেই।", style: TextStyle(color: Colors.grey))
                 : ListView.builder(
@@ -360,11 +323,12 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                             onPressed: () {
                               setState(() {
                                 String p = req['phone'];
-                                double amt = req['amount'];
+                                double amt = (req['amount'] as num).toDouble();
                                 for (var c in customers) {
                                   if (c['phone'] == p) {
-                                    c['due'] = (c['due'] - amt).clamp(0, double.infinity);
-                                    c['notes'].add("অনলাইন পেমেন্ট অনুমোদিত: ৳ $amt (শেষ ৪: ${req['last4']})");
+                                    double curDue = (c['due'] as num).toDouble();
+                                    c['due'] = (curDue - amt).clamp(0.0, double.infinity);
+                                    (c['notes'] as List).add("অনলাইন পেমেন্ট অনুমোদিত: ৳ $amt (শেষ ৪: ${req['last4']})");
                                     break;
                                   }
                                 }
@@ -388,6 +352,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     final last4Controller = TextEditingController();
     final addDueAmountController = TextEditingController();
     final addDueNoteController = TextEditingController();
+    final double dueVal = (cust['due'] as num).toDouble();
 
     showDialog(
       context: context,
@@ -396,7 +361,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(child: Text(cust['name'], style: const TextStyle(fontWeight: FontWeight.bold))),
-            Text("৳ ${cust['due'].toStringAsFixed(0)}", style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20)),
+            Text("৳ ${dueVal.toStringAsFixed(0)}", style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20)),
           ],
         ),
         content: SingleChildScrollView(
@@ -408,7 +373,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               const Divider(),
               const Text("নোট ও হিসাবের বিবরণ:", style: TextStyle(fontWeight: FontWeight.bold)),
               Container(
-                height: 100,
+                height: 90,
                 width: double.maxFinite,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(8)),
@@ -432,8 +397,9 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                           double addAmt = double.tryParse(addDueAmountController.text) ?? 0.0;
                           if (addAmt > 0) {
                             setState(() {
-                              cust['due'] += addAmt;
-                              cust['notes'].add("নতুন বাকি: ৳ $addAmt (${addDueNoteController.text})");
+                              double cur = (cust['due'] as num).toDouble();
+                              cust['due'] = cur + addAmt;
+                              (cust['notes'] as List).add("নতুন বাকি: ৳ $addAmt (${addDueNoteController.text})");
                             });
                             Navigator.pop(ctx);
                           }
@@ -449,8 +415,9 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                           double cashAmt = double.tryParse(addDueAmountController.text) ?? 0.0;
                           if (cashAmt > 0) {
                             setState(() {
-                              cust['due'] = (cust['due'] - cashAmt).clamp(0, double.infinity);
-                              cust['notes'].add("নগদ পরিশোধ: ৳ $cashAmt (${addDueNoteController.text})");
+                              double cur = (cust['due'] as num).toDouble();
+                              cust['due'] = (cur - cashAmt).clamp(0.0, double.infinity);
+                              (cust['notes'] as List).add("নগদ পরিশোধ: ৳ $cashAmt (${addDueNoteController.text})");
                             });
                             Navigator.pop(ctx);
                           }
@@ -461,7 +428,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                   ],
                 ),
               ] else ...[
-                const Text("বিকাশ বা নগদে পরিশোধের তথ্য:", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.teal)),
+                const Text("বিকাশ/নগদে পরিশোধের তথ্য:", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.teal)),
                 TextField(controller: amountController, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: "কত টাকা পাঠিয়েছেন?")),
                 TextField(controller: last4Controller, keyboardType: TextInputType.number, maxLength: 4, decoration: const InputDecoration(labelText: "নম্বরের শেষ ৪ সংখ্যা")),
                 ElevatedButton(
@@ -499,7 +466,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("নতুন বাকি এন্ট্রি করুন", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text("নতুন বাকি এন্ট্রি", style: TextStyle(fontWeight: FontWeight.bold)),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -522,7 +489,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     "name": nameC.text,
                     "phone": phoneC.text,
                     "due": double.tryParse(amountC.text) ?? 0.0,
-                    "notes": ["${DateTime.now().day}/${DateTime.now().month}: ${noteC.text} (৳ ${amountC.text})"],
+                    "notes": <String>["${DateTime.now().day}/${DateTime.now().month}: ${noteC.text} (৳ ${amountC.text})"],
                   });
                 });
                 Navigator.pop(ctx);
@@ -535,7 +502,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     );
   }
 
-  // ২. ওষুধ তালিকা ও DIMS
+  // ২. ওষুধ ডিরেক্টরি
   Widget _buildMedicineDirectory() {
     TextEditingController searchC = TextEditingController();
     List<Map<String, String>> filtered = List.from(medicineDatabase);
@@ -555,7 +522,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white),
                       icon: const Icon(Icons.add, size: 18),
                       label: const Text("+ ওষুধ যুক্ত করুন"),
-                      onPressed: () => _addNewMedicineDialog(setDirState),
+                      onPressed: () => _addNewMedicineDialog(),
                     ),
                   ],
                 ),
@@ -571,10 +538,13 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 ),
                 onChanged: (val) {
                   setDirState(() {
-                    filtered = medicineDatabase.where((m) =>
-                        m['name']!.toLowerCase().contains(val.toLowerCase()) ||
-                        m['generic']!.toLowerCase().contains(val.toLowerCase()) ||
-                        m['company']!.toLowerCase().contains(val.toLowerCase())).toList();
+                    filtered = medicineDatabase.where((m) {
+                      final n = (m['name'] ?? '').toLowerCase();
+                      final g = (m['generic'] ?? '').toLowerCase();
+                      final c = (m['company'] ?? '').toLowerCase();
+                      final s = val.toLowerCase();
+                      return n.contains(s) || g.contains(s) || c.contains(s);
+                    }).toList();
                   });
                 },
               ),
@@ -587,9 +557,9 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     return Card(
                       child: ListTile(
                         leading: CircleAvatar(backgroundColor: Colors.teal.shade50, child: const Icon(Icons.medication, color: Colors.teal)),
-                        title: Text(item['name']!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        title: Text(item['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text("জেনেরিক: ${item['generic']}\nকোম্পানি: ${item['company']}"),
-                        trailing: Chip(label: Text(item['type']!), backgroundColor: Colors.teal.shade50),
+                        trailing: Chip(label: Text(item['type'] ?? 'Tablet'), backgroundColor: Colors.teal.shade50),
                       ),
                     );
                   },
@@ -602,7 +572,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     );
   }
 
-  void _addNewMedicineDialog(StateSetter setDirState) {
+  void _addNewMedicineDialog() {
     final nameC = TextEditingController();
     final genericC = TextEditingController();
     final companyC = TextEditingController();
@@ -618,7 +588,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             children: [
               TextField(controller: nameC, decoration: const InputDecoration(labelText: "ওষুধের নাম (যেমন: Napa 500mg)")),
               TextField(controller: genericC, decoration: const InputDecoration(labelText: "জেনেরিক (যেমন: Paracetamol)")),
-              TextField(controller: companyC, decoration: const InputDecoration(labelText: "কোম্পানি (যেমন: Square / Beximco)")),
+              TextField(controller: companyC, decoration: const InputDecoration(labelText: "কোম্পানি (যেমন: Square)")),
               TextField(controller: typeC, decoration: const InputDecoration(labelText: "ধরন (Tablet / Capsule)")),
             ],
           ),
@@ -634,10 +604,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     "generic": genericC.text,
                     "company": companyC.text.isEmpty ? "Local" : companyC.text,
                     "type": typeC.text,
-                    "cat": "All",
                   });
                 });
-                setDirState(() {});
                 Navigator.pop(ctx);
               }
             },
@@ -648,7 +616,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     );
   }
 
-  // ৩. প্রেসক্রিপশন স্ক্রিন
+  // ৩. অর্ডার স্ক্রিন
   Widget _buildOrderScreen() {
     final noteController = TextEditingController();
     final phoneController = TextEditingController();
@@ -665,7 +633,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 children: [
                   const Text("প্রেসক্রিপশন আপলোড বা অর্ডার ফর্ম", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   TextField(controller: phoneController, keyboardType: TextInputType.phone, decoration: const InputDecoration(labelText: "মোবাইল নম্বর")),
-                  TextField(controller: noteController, maxLines: 2, decoration: const InputDecoration(labelText: "ওষুধের নাম ও পরিমাণ")),
+                  TextField(controller: noteController, maxLines: 2, decoration: const InputDecoration(labelText: "ওষুধের নাম ও বিবরণ")),
                   const SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF00796B), foregroundColor: Colors.white),
@@ -710,12 +678,12 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     );
   }
 
-  // ৪. সেলস ও লাভ ট্র্যাকার
+  // ৪. সেলস ও প্রফিট ট্র্যাকার
   Widget _buildSalesTargetScreen() {
     final saleC = TextEditingController();
     double netProfit = todaySale * (profitMargin / 100);
-    double targetRemaining = (monthlyTarget - currentMonthAchieved).clamp(0, double.infinity);
-    double progressPercent = (currentMonthAchieved / monthlyTarget).clamp(0.0, 1.0);
+    double targetRemaining = (monthlyTarget - currentMonthAchieved).clamp(0.0, double.infinity);
+    double progressPercent = monthlyTarget > 0 ? (currentMonthAchieved / monthlyTarget).clamp(0.0, 1.0) : 0.0;
 
     return Padding(
       padding: const EdgeInsets.all(14.0),
@@ -847,3 +815,49 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   }
 
   void _showAdminAuthDialog() {
+    final passC = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(isAdmin ? "লগআউট" : "অ্যাডমিন লগইন"),
+        content: isAdmin
+            ? const Text("কাস্টমার মোডে ফিরে যেতে লগআউট চাপুন।")
+            : TextField(controller: passC, obscureText: true, decoration: const InputDecoration(labelText: "পাসওয়ার্ড দিন")),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("বাতিল")),
+          ElevatedButton(
+            onPressed: () {
+              if (isAdmin) {
+                setState(() => isAdmin = false);
+                Navigator.pop(ctx);
+              } else if (passC.text == adminPassword) {
+                setState(() => isAdmin = true);
+                Navigator.pop(ctx);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("ভুল পাসওয়ার্ড!")));
+              }
+            },
+            child: Text(isAdmin ? "লগআউট" : "লগইন"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showContactDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("সুলতান ফার্মেসি যোগাযোগ"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(leading: const Icon(Icons.phone, color: Colors.green), title: const Text("সরাসরি কল"), subtitle: Text(helplineNumber)),
+            ListTile(leading: const Icon(Icons.chat, color: Colors.teal), title: const Text("WhatsApp চ্যাট"), subtitle: Text(whatsappNumber)),
+          ],
+        ),
+        actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("ঠিক আছে"))],
+      ),
+    );
+  }
+}
